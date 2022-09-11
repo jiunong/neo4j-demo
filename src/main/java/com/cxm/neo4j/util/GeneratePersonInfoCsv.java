@@ -12,17 +12,15 @@ import java.util.Random;
 
 public class GeneratePersonInfoCsv {
 
-    private final static List<String> xing = ListUtils.newArrayList("赵", "钱", "孙", "李");
-    private final static List<String> ming = ListUtils.newArrayList("一", "二", "三", "四");
-
-
     public static List<Person> getPersons(int num) {
         List<Person> personList = ListUtil.list(false);
         RandInfo randInfo = new RandInfo();
         for (int i = 0; i < num; i++) {
             String[] nameAndSex = randInfo.getNameAndSex(i % 2 == 1 ? "男" : "女");
+            String familyName = randInfo.getFamilyName();
             personList.add(Person.builder().idCard(getIdNo(i % 2 == 1))
-                    .name(randInfo.getFamilyName().concat(nameAndSex[0]))
+                    .name(familyName.concat(nameAndSex[0]))
+                            .familyName(familyName)
                     .sex(nameAndSex[1]).build());
         }
         return personList;
