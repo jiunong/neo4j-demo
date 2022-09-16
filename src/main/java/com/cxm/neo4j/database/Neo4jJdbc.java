@@ -4,6 +4,7 @@ package com.cxm.neo4j.database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+@Deprecated
 public class Neo4jJdbc {
 
 

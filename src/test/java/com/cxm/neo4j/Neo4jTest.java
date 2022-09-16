@@ -1,6 +1,8 @@
 package com.cxm.neo4j;
 
 
+import com.cxm.neo4j.database.Neo4jJavaJdbc;
+import com.cxm.neo4j.database.Neo4jQuery;
 import org.junit.jupiter.api.Test;
 import org.neo4j.driver.*;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +20,14 @@ import static org.neo4j.driver.Values.parameters;
 public class Neo4jTest {
     @Test
     void main0() {
+
+
+        Neo4jQuery.query("MATCH (n) return n",u->{
+            while (u.getResultSet().hasNext()){
+                System.out.println(u.getResultSet().next().asMap());
+            }
+        });
+
         // 加载驱动
         Driver driver = GraphDatabase.driver("bolt://localhost:7687/", AuthTokens.basic("neo4j", "cxm123456"));
         // 获取连接
@@ -65,6 +75,7 @@ public class Neo4jTest {
             Result result = transaction.run("MATCH (n:person) WHERE id(n) = $id return n.name", parameters("id", id));
             return result.single().get(0).asString();
         });
+
     }
 
     /**
@@ -108,6 +119,10 @@ public class Neo4jTest {
      * @param id      id
      */
     private static void deletePerson(Session session, long id) {
+
+        Neo4jQuery.query("DELETE FROM",u->{
+            System.out.println(u.getResultSet());
+        },"id","1");
         // 执行添加
         session.writeTransaction(transaction -> {
             transaction.run("MATCH (n) WHERE id(n) = $id DELETE n", parameters("id", id));

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+@Deprecated
 public class DecoratorDbQuery extends AbstractDbQuery {
 
 
