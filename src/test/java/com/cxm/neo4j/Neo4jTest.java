@@ -22,9 +22,9 @@ public class Neo4jTest {
     void main0() {
 
 
-        Neo4jQuery.query("MATCH (n) return n",u->{
+        Neo4jQuery.query("MATCH (n) return n.姓名 as name",u->{
             while (u.getResultSet().hasNext()){
-                System.out.println(u.getResultSet().next().asMap());
+                System.out.println(u.getResultSet().next().get("name").asString());
             }
         });
 
