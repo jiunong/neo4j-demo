@@ -14,6 +14,7 @@ public class Neo4jQuery {
     public static void query(String cypher, Consumer<Neo4jResultWrapper> consumer) {
         Result result = session.run(cypher);
         consumer.accept(new Neo4jResultWrapper(result));
+        session.close();
     }
 
     /**
@@ -28,6 +29,7 @@ public class Neo4jQuery {
             consumer.accept(new Neo4jResultWrapper(transaction.run(cypher, parameters(kavs))));
             return null;
         });
+        session.close();
     }
 
     /**
@@ -42,6 +44,7 @@ public class Neo4jQuery {
             consumer.accept(new Neo4jResultWrapper(transaction.run(cypher, parameters(kavs))));
             return null;
         });
+        session.close();
     }
 
 }
