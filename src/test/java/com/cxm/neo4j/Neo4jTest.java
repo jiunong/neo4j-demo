@@ -22,45 +22,23 @@ public class Neo4jTest {
     void main0() {
 
 
-        Neo4jQuery.query("MATCH (n) return n.姓名 as name",u->{
+      /*  Neo4jQuery.query("MATCH (n) return n.姓名 as name",u->{
             while (u.getResultSet().hasNext()){
                 System.out.println(u.getResultSet().next().get("name").asString());
             }
-        });
+        });*/
 
-        // 加载驱动
-        Driver driver = GraphDatabase.driver("bolt://localhost:7687/", AuthTokens.basic("neo4j", "cxm123456"));
-        // 获取连接
-        Session session = driver.session();
 
-        // 统计总数
-        int count = count(session, "MATCH (n) return count(n)");
-        System.out.println("统计总数为：" + count);
+        Neo4jQuery.update("MATCH (n:Person) where n.姓 = $name and n.性别=$sex return n.姓名 as name1",u->{
+            while (u.getResultSet().hasNext()){
+                System.out.println(u.getResultSet().next().get("name1").asString());
+            }
+        },"name","家","sex","男");
 
-        // 添加
-        long id = createPerson(session, "测试添加");
-        System.out.println("添加id为：" + id);
-
-        // 查询名称
-        String name = getPersonById(session, id);
-        System.out.println("添加名称为：" + name);
-
-        // 修改
-        updatePerson(session, id, "测试修改");
-
-        // 查询名称
-        name = getPersonById(session, id);
-        System.out.println("修改后名称为：" + name);
-
-        // 删除
-        deletePerson(session, id);
-
-        // 执行查询
-        queryPerson(session);
 
         // 释放资源
-        session.close();
-        driver.close();
+        //session.close();
+        //driver.close();
     }
 
     /**
