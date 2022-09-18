@@ -29,7 +29,7 @@ public class Neo4jTest {
         });*/
 
 
-        Neo4jQuery.update("MATCH (n:Person) where n.姓 = $name and n.性别=$sex return n.姓名 as name1",u->{
+        Neo4jQuery.write("MATCH (n:Person) where n.姓 = $name and n.性别=$sex return n.姓名 as name1",u->{
             while (u.getResultSet().hasNext()){
                 System.out.println(u.getResultSet().next().get("name1").asString());
             }

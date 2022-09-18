@@ -37,7 +37,7 @@ public class Neo4jQuery {
      * @param consumer
      * @param kavs
      */
-    public static void update(String cypher, Consumer<Neo4jResultWrapper> consumer, Object... kavs) {
+    public static void write(String cypher, Consumer<Neo4jResultWrapper> consumer, Object... kavs) {
         session.writeTransaction(transaction -> {
             consumer.accept(new Neo4jResultWrapper(transaction.run(cypher, parameters(kavs))));
             return null;
