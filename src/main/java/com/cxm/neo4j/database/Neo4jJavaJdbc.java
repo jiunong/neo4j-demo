@@ -1,11 +1,9 @@
 package com.cxm.neo4j.database;
 
-import org.neo4j.driver.*;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.function.Consumer;
+import org.neo4j.driver.AuthTokens;
+import org.neo4j.driver.Driver;
+import org.neo4j.driver.GraphDatabase;
+import org.neo4j.driver.Session;
 
 public class Neo4jJavaJdbc {
 
