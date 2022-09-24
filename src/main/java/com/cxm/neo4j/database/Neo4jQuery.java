@@ -44,7 +44,6 @@ public class Neo4jQuery {
             consumer.accept(new Neo4jResultWrapper(transaction.run(cypher, parameters(kavs))));
             return null;
         });
-        session.close();
     }
 
 }

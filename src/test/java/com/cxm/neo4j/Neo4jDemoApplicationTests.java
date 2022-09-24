@@ -1,20 +1,23 @@
 package com.cxm.neo4j;
 
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.excel.EasyExcel;
 import com.cxm.neo4j.database.DecoratorDbQuery;
 import com.cxm.neo4j.database.Neo4jJdbc;
 import com.cxm.neo4j.database.Neo4jQuery;
 import com.cxm.neo4j.model.Person;
 import com.cxm.neo4j.util.GeneratePersonInfoCsv;
+import com.cxm.neo4j.util.Neo4jUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 @SpringBootTest
 class Neo4jDemoApplicationTests {
@@ -99,4 +102,28 @@ class Neo4jDemoApplicationTests {
         }
     }
 
+    @Test
+    void loadJson(){
+        String records = FileUtil.readUtf8String("C:\\Users\\Administrator\\Desktop\\records.json");
+        JSONArray values = JSONUtil.parseArray(records);
+        values.stream().map(JSONObject::new).forEach(u->{
+            JSONObject n = Neo4jUtil.ObjectToJsonList(u.get("n")).get(0);
+            List<JSONObject> labels = Neo4jUtil.ObjectToJsonList(n.get("labels"));
+            List<JSONObject> properties = Neo4jUtil.ObjectToJsonList(n.get("properties"));
+            JSONObject entries = properties.get(0);
+            Iterator<Map.Entry<String, Object>> iterator = entries.entrySet().iterator();
+            String sql = "CREATE (n:飞机出行{承运航空公司代码:'"+entries.get("承运航空公司代码")+"'" +
+                    ",姓名:'"+entries.get("姓名")+"'" +
+                    ",时间:'"+entries.get("时间")+"'" +
+                    ",登机机场:'"+entries.get("登机机场")+"'" +
+                    ",地点:'"+entries.get("地点")+"'" +
+                    ",航班号:'"+entries.get("航班号")+"'" +
+                    ",name:'"+entries.get("name")+"'" +
+                    ",到达机场:'"+entries.get("到达机场")+"'" +
+                    ",起始站:'"+entries.get("起始站")+"'" +
+                    ",身份证号:'"+entries.get("身份证号")+"'" +
+                    ",Name:'"+entries.get("Name")+"'})";
+            Neo4jQuery.write(sql,u2->{});
+        });
+    }
 }
