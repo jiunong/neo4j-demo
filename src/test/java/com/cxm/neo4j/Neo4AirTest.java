@@ -93,17 +93,27 @@ public class Neo4AirTest {
     /**
      * TODO
      *
-     * @param *             @param list :
-     * @param excludeLabels :  允许不一样的标签
+     * @param list : 数据集合map
+     * @param excludeLabels :  允许不一样的属性
      * @return void
      * @author xuhong.ding
      * @since 2022/9/24 16:52
      **/
 
     void test4(List<LinkedHashMap<String, Object>> list, String... excludeLabels) {
-        LinkedHashSet res = new LinkedHashSet();
+        //存放待打印的符合条件的数据
+        LinkedHashSet<String> res = new LinkedHashSet();
+        // 不一样的属性集合
         List<String> labelList = ListUtil.of(excludeLabels);
+        //存放数据结果
         List<AirplaneTravel> compareList = ListUtil.list(false);
+        /*
+            循环集合
+            重新处理每个数据对象
+            属性在labelList里的拼接一个字符串compareValue
+                不在labelList里的拼接字符串compareKey
+            当compareKey重复则将重复的两条数据放入res
+         */
         list.forEach(u -> {
             StringBuilder compareKey = new StringBuilder();
             StringBuilder compareValue = new StringBuilder();
@@ -118,6 +128,7 @@ public class Neo4AirTest {
             }
             AirplaneTravel build = AirplaneTravel.builder().compareKey(compareKey.toString()).compareValue(compareValue.toString()).build();
             List<String> compareKeyList = compareList.stream().map(AirplaneTravel::getCompareKey).collect(Collectors.toList());
+            //当compareKey重复则将重复的两条数据放入res 否则放入compareList
             if (!compareKeyList.contains(compareKey.toString())) {
                 compareList.add(build);
             } else {
