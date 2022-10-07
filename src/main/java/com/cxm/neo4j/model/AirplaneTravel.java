@@ -1,5 +1,6 @@
 package com.cxm.neo4j.model;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Builder;
 import lombok.Data;
 
@@ -15,7 +16,11 @@ import java.util.Objects;
 @Builder
 public class AirplaneTravel {
 
+    @ExcelProperty("index")
+    private int index ;
+    @ExcelProperty("相同")
     private String compareKey;
+    @ExcelProperty("不同")
     private String compareValue;
 
     @Override
