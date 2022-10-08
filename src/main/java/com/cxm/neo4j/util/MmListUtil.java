@@ -5,8 +5,19 @@ import com.cxm.neo4j.strategy.AtPredicate;
 
 import java.util.List;
 
+/**
+ * @author dingxuhong.sict.ac.cn
+ *  萌萌
+ */
 public class MmListUtil {
 
+    /**
+     * @TODO 遍历集合 两两对比 返回符合预测的集合
+     * @param list
+     * @param predicate
+     * @return
+     * @param <T>
+     */
     public static <T> List<T> getEffectedList(List<T> list, AtPredicate<T> predicate) {
         List<T> objects = ListUtil.list(true);
         for (int i = list.size() - 1; i >= 0; i--) {
