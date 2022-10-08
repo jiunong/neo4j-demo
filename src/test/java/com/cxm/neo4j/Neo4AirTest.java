@@ -12,6 +12,7 @@ import cn.hutool.json.JSONUtil;
 import com.alibaba.excel.EasyExcel;
 import com.cxm.neo4j.database.Neo4jQuery;
 import com.cxm.neo4j.model.AirplaneTravel;
+import com.cxm.neo4j.util.MmListUtil;
 import com.cxm.neo4j.util.Neo4jUtil;
 import org.junit.jupiter.api.Test;
 import org.neo4j.driver.Record;
@@ -96,7 +97,7 @@ public class Neo4AirTest {
         });
         //test4(list, "时间");
         //test4(list, "时间", "地点", "起始站");
-        test5(list, "时间", 30*MINUTE);
+        test5(list, "时间", 30 * MINUTE);
     }
 
 
@@ -203,7 +204,13 @@ public class Neo4AirTest {
         Map<Integer, List<AirplaneTravel>> apsMap = aps.stream().collect(Collectors.groupingBy(AirplaneTravel::getIndex));
         apsMap.keySet().forEach(i -> {
             List<AirplaneTravel> compareData = apsMap.get(i);
-            for (int i1 = compareData.size() - 1; i1 >= 0; i1--) {
+            List<AirplaneTravel> effectedList = MmListUtil.getEffectedList(compareData, (AirplaneTravel u1, AirplaneTravel u2) -> {
+                long d1 = DateUtil.parse(u1.getCompareValue(), DatePattern.NORM_DATETIME_FORMAT).getTime();
+                long d2 = DateUtil.parse(u2.getCompareValue(), DatePattern.NORM_DATETIME_FORMAT).getTime();
+                return Math.abs(d1 - d2) <= timeRange;
+            });
+            res.addAll(effectedList);
+           /* for (int i1 = compareData.size() - 1; i1 >= 0; i1--) {
                 for (int i2 = i1 - 1; i2 >= 0; i2--) {
                     long d1 = DateUtil.parse(compareData.get(i1).getCompareValue(), DatePattern.NORM_DATETIME_FORMAT).getTime();
                     long d2 = DateUtil.parse(compareData.get(i2).getCompareValue(), DatePattern.NORM_DATETIME_FORMAT).getTime();
@@ -212,7 +219,7 @@ public class Neo4AirTest {
                         res.add(compareData.get(i2));
                     }
                 }
-            }
+            }*/
         });
         EasyExcel.write("/Users/mac/Downloads/result" + DateUtil.now() + ".csv", AirplaneTravel.class).sheet(excludeLabel).doWrite(res.stream().sorted(Comparator.comparing(AirplaneTravel::getIndex)).collect(Collectors.toList()));
     }

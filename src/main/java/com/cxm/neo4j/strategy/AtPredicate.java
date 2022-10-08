@@ -1,6 +1,7 @@
 package com.cxm.neo4j.strategy;
 
-public interface AtPridicate<T> {
+@FunctionalInterface
+public interface AtPredicate<T>  {
 
     boolean isEffective(T t1,T t2);
 
